@@ -1,48 +1,89 @@
 'use client';
 import { useEffect, useState } from 'react';
 
+// 🔹 Navbar component
+function Navbar() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  return (
+    <nav className="bg-gray-700 text-white shadow-md">
+      <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+        {/* โลโก้ */}
+        <div className="flex items-center space-x-2">
+          <span className="text-2xl">🛍️</span>
+          <h1 className="text-xl font-bold">Moki Shop</h1>
+        </div>
+
+        {/* เมนูปกติ (desktop) */}
+        <div className="hidden md:flex space-x-6">
+          <a href="" className="hover:text-gray-300">หน้าแรก</a>
+          <a href="#" className="hover:text-gray-300">หมวดหมู่สินค้า</a>
+          <a href="#" className="hover:text-gray-300">ติดต่อเรา</a>
+        </div>
+
+        {/* ปุ่ม 3 ขีด (mobile) */}
+        <button
+          className="md:hidden flex items-center text-white focus:outline-none"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {menuOpen ? (
+              // ปุ่ม X
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            ) : (
+              // ปุ่ม 3 ขีด
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            )}
+          </svg>
+        </button>
+      </div>
+
+      {/* เมนูมือถือ */}
+      {menuOpen && (
+        <div className="md:hidden bg-gray-700 px-4 pb-3 space-y-2 text-sm">
+          <a href="" className="block py-1 border-b border-gray-600 hover:text-blue-300">หน้าแรก</a>
+          <a href="#" className="block py-1 border-b border-gray-600 hover:text-blue-300">หมวดหมู่สินค้า</a>
+          <a href="#" className="block py-1 hover:text-blue-300">ติดต่อเรา</a>
+        </div>
+      )}
+    </nav>
+  );
+}
+
+// 🔹 หน้าแสดงสินค้า
 export default function Page() {
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  // ดึงข้อมูลสินค้าจาก API ที่เราสร้างไว้
   useEffect(() => {
-    async function fetchProducts() {
-      try {
-        const res = await fetch('/api/products');
-        const data = await res.json();
-        setProducts(data.products || []);
-      } catch (err) {
-        console.error('Error fetching products:', err);
-        setError('ไม่สามารถโหลดข้อมูลได้');
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchProducts();
+    document.title = 'Moki Shop | หน้าแรก';
+    fetch('/api/products')
+      .then((res) => res.json())
+      .then((data) => setProducts(data.products || []));
   }, []);
-
-  if (loading) return <div className="text-center mt-10 text-lg">⏳ กำลังโหลดสินค้า...</div>;
-  if (error) return <div className="text-center text-red-500 mt-10">{error}</div>;
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Navbar */}
-      <nav className="bg-blue-600 text-white py-4 shadow-md">
-        <div className="max-w-6xl mx-auto flex justify-between items-center px-4">
-          <h1 className="text-xl font-bold">🛍️ Moki Shop</h1>
-          <div className="space-x-4">
-            <a href="#" className="hover:underline">หน้าแรก</a>
-            <a href="#" className="hover:underline">หมวดหมู่สินค้า</a>
-            <a href="#" className="hover:underline">ติดต่อเรา</a>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
-      {/* รายการสินค้า */}
       <main className="max-w-6xl mx-auto px-4 py-8">
         <h2 className="text-2xl font-bold mb-6 text-gray-800">รายการสินค้า</h2>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {products.map((product) => (
             <div
@@ -56,8 +97,8 @@ export default function Page() {
               />
               <div className="p-4">
                 <h3 className="text-md font-semibold text-gray-700 truncate">{product.title}</h3>
-                <p className="text-blue-600 font-bold mt-2">${product.price}</p>
-                <button className="mt-3 w-full bg-blue-500 text-white py-1.5 rounded hover:bg-blue-600">
+                <p className="text-gray-700 font-bold mt-2">${product.price}</p>
+                <button className="mt-3 w-full bg-gray-700 text-white py-1.5 rounded hover:bg-black">
                   ดูรายละเอียด
                 </button>
               </div>
