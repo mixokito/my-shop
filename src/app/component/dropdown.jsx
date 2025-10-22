@@ -1,15 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './dropdown.module.css';
+import { useRouter } from 'next/navigation';
 
 const Dropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const categories = [
-    'อิเล็กทรอนิกส์',
-    'เสื้อผ้า',
-    'อุปกรณ์ทั่วไป',
-    'เครื่องประดับ',
-    
-  ];
+  const [categories, setCategories] = useState([]);
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('/api/products/categories');
+        const data = await response.json();
+        setCategories(data.categories);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  const handleCategoryClick = (path) => {
+    router.push(`/category/${path}`);
+    setIsOpen(false);
+  };
 
   return (
     <div 
@@ -25,10 +39,14 @@ const Dropdown = () => {
       </button>
       {isOpen && (
         <div className={styles.dropdownContent}>
-          {categories.map((category, index) => (
-            <a key={index} href={`/category/${category}`} className={styles.dropdownItem}>
-              {category}
-            </a>
+          {categories.map((category) => (
+            <button
+              key={category.id}
+              onClick={() => handleCategoryClick(category.path)}
+              className={styles.dropdownItem}
+            >
+              {category.name}
+            </button>
           ))}
         </div>
       )}
