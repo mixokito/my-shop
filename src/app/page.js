@@ -4,13 +4,45 @@ import { useEffect, useState } from 'react';
 // 🔹 หน้าแสดงสินค้า
 export default function Page() {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     document.title = 'Moki Shop | หน้าแรก';
-    fetch('/api/products')
-      .then((res) => res.json())
-      .then((data) => setProducts(data.products || []));
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('/api/products');
+        if (!response.ok) {
+          throw new Error('Failed to fetch products');
+        }
+        const data = await response.json();
+        setProducts(data.products || []);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
   }, []);
+
+  if (loading) return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="text-center">
+        <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-gray-700"></div>
+        <p className="mt-2 text-gray-600">กำลังโหลด...</p>
+      </div>
+    </div>
+  );
+
+  if (error) return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="text-center text-red-600">
+        <p>เกิดข้อผิดพลาด: {error}</p>
+      </div>
+    </div>
+  );
 
   return (
     <div>

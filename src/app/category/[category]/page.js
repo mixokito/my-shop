@@ -40,18 +40,28 @@ export default function CategoryPage(props) {
       <div className={styles.productsGrid}>
         {products.map((product) => (
           <div key={product.id} className={styles.productCard}>
-            <img
-              src={product.image}
-              alt={product.title}
-              className={styles.productImage}
-            />
+            <div className={styles.imageContainer}>
+              <img
+                src={product.image}
+                alt={product.title}
+                className={styles.productImage}
+              />
+            </div>
             <div className={styles.productInfo}>
               <h3 className={styles.productTitle}>
                 {product.title}
               </h3>
-              <p className={styles.productPrice}>
-                ${product.price.toFixed(2)}
+              <p className={styles.productDescription}>
+                {product.description}
               </p>
+              <div className={styles.productBottom}>
+                <p className={styles.productPrice}>
+                  ${product.price.toFixed(2)}
+                </p>
+                <button className={styles.detailsButton}>
+                  ดูรายละเอียด
+                </button>
+              </div>
             </div>
           </div>
         ))}
