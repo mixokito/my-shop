@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import Dropdown from './component/dropdown';
 
 // 🔹 Navbar component
 function Navbar() {
@@ -15,10 +16,10 @@ function Navbar() {
         </div>
 
         {/* เมนูปกติ (desktop) */}
-        <div className="hidden md:flex space-x-6">
+        <div className="hidden md:flex space-x-6 items-center">
           <a href="" className="hover:text-gray-300">หน้าแรก</a>
-          <a href="#" className="hover:text-gray-300">หมวดหมู่สินค้า</a>
-          <a href="#" className="hover:text-gray-300">ติดต่อเรา</a>
+          <Dropdown />
+          <a href="https://www.youtube.com/watch?v=xvFZjo5PgG0" className="hover:text-gray-300">ติดต่อเรา</a>
         </div>
 
         {/* ปุ่ม 3 ขีด (mobile) */}
@@ -58,7 +59,9 @@ function Navbar() {
       {menuOpen && (
         <div className="md:hidden bg-gray-700 px-4 pb-3 space-y-2 text-sm">
           <a href="" className="block py-1 border-b border-gray-600 hover:text-blue-300">หน้าแรก</a>
-          <a href="#" className="block py-1 border-b border-gray-600 hover:text-blue-300">หมวดหมู่สินค้า</a>
+          <div className="py-1 border-b border-gray-600">
+            <Dropdown />
+          </div>
           <a href="#" className="block py-1 hover:text-blue-300">ติดต่อเรา</a>
         </div>
       )}
