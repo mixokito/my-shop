@@ -28,9 +28,15 @@ export default function CategoryPage(props) {
     fetchProducts();
   }, [params.category]);
 
-  if (loading) return <div>กำลังโหลด...</div>;
-  if (error) return <div>เกิดข้อผิดพลาด: {error}</div>;
-
+ if (loading) return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="text-center">
+        <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-gray-700"></div>
+        <p className="mt-2 text-gray-600">กำลังโหลด...</p>
+      </div>
+    </div>
+  );
+  
   return (
     <div className="min-h-screen bg-gray-50">
       <h1 className={styles.categoryTitle}>
