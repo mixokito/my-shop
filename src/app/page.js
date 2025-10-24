@@ -10,6 +10,7 @@ export default function CategoryPage(props) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+     document.title = 'Moki Shop';
     const fetchProducts = async () => {
       try {
         const response = await fetch(`/api/products/category/${params.category}`);
@@ -74,4 +75,5 @@ export default function CategoryPage(props) {
       </div>
     </div>
   );
+
 }
